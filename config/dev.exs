@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :test_api, TestApi.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "backend",
+  password: "170520210921",
   hostname: "localhost",
   database: "test_api_dev",
   stacktrace: true,

@@ -42,15 +42,16 @@ defmodule TestApi.Users do
 
   ## Examples
 
-      iex> create_user(%{field: value})
+      iex> create_user(%Account{}, %{field: value})
       {:ok, %User{}}
 
-      iex> create_user(%{field: bad_value})
+      iex> create_user(%Account{}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
-    %User{}
+  def create_user(account, attrs \\ %{}) do
+    account
+    |> Ecto.build_assoc(:user)
     |> User.changeset(attrs)
     |> Repo.insert()
   end

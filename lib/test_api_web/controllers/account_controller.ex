@@ -1,8 +1,8 @@
 defmodule TestApiWeb.AccountController do
   use TestApiWeb, :controller
 
-  alias TestApi.Accounts
-  alias TestApi.Accounts.Account
+  alias TestApiWeb.Auth.Guardian
+  alias TestApi.{Users, Users.User, Accounts, Accounts.Account}
 
   action_fallback TestApiWeb.FallbackController
 
@@ -12,10 +12,12 @@ defmodule TestApiWeb.AccountController do
   end
 
   def create(conn, %{"account" => account_params}) do
-    with {:ok, %Account{} = account} <- Accounts.create_account(account_params) do
+    with {:ok, %Account{} = account} <- Accounts.create_account(account_params),
+          {:ok, token, _claims} <- Guardian.encode_and_sign(account),
+          {:ok, %User{} = _user} <- Users.create_user(account, account_params) do
       conn
       |> put_status(:created)
-      |> render(:show, account: account)
+      |> render(:show, account: account, token: token)
     end
   end
 

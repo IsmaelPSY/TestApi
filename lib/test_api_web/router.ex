@@ -7,5 +7,6 @@ defmodule TestApiWeb.Router do
 
   scope "/api", TestApiWeb do
     pipe_through :api
+    get "/", DefaulController, :index
   end
 end

@@ -11,11 +11,25 @@ defmodule TestApiWeb.AccountJSON do
   @doc """
   Renders a single account.
   """
-  def show(%{account: account} = params) do
-    %{data: data(account, params[:token])}
+  def show(%{account: account}) do
+    %{data: data(account)}
   end
 
-  defp data(%Account{} = account, token \\ nil) do
+  @doc """
+  Renders a single account plus token.
+  """
+  def show_token(%{account: account, token: token}) do
+    %{data: data_with_token(account, token)}
+  end
+
+  defp data(%Account{} = account) do
+    %{
+      id: account.id,
+      email: account.email
+    }
+  end
+
+  defp data_with_token(%Account{} = account, token) do
     %{
       id: account.id,
       email: account.email,

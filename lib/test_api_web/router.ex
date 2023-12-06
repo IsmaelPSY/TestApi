@@ -8,6 +8,12 @@ defmodule TestApiWeb.Router do
   scope "/api", TestApiWeb do
     pipe_through :api
     get "/", DefaultController, :index
-    post "/accounts/create", AccountController, :create
+
+    scope "/accounts" do
+      get "/", AccountController, :index
+      get "/:id", AccountController, :show
+      post "/create", AccountController, :create
+    end
   end
+
 end

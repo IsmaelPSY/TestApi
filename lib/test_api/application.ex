@@ -10,6 +10,7 @@ defmodule TestApi.Application do
     children = [
       TestApiWeb.Telemetry,
       TestApi.Repo,
+      {Oban, Application.fetch_env!(:test_api, Oban)},
       {DNSCluster, query: Application.get_env(:test_api, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TestApi.PubSub},
       # Start a worker by calling: TestApi.Worker.start_link(arg)

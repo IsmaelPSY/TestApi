@@ -23,5 +23,7 @@ config :test_api, TestApiWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warning
 
+config :test_ap, Oban, testing: :inline
+
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

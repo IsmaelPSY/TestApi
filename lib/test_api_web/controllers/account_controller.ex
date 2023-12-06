@@ -17,7 +17,7 @@ defmodule TestApiWeb.AccountController do
           {:ok, %User{} = _user} <- Users.create_user(account, account_params) do
       conn
       |> put_status(:created)
-      |> render(:show, account: account, token: token)
+      |> render(:show_token, account: account, token: token)
     end
   end
 

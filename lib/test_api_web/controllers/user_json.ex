@@ -18,7 +18,7 @@ defmodule TestApiWeb.UserJSON do
   defp data(%User{} = user) do
     %{
       id: user.id,
-      fullname: user.fullname,
+      full_name: user.full_name,
       gender: user.gender,
       biography: user.biography
     }

@@ -36,7 +36,12 @@ config :phoenix, :json_library, Jason
 
 config :test_api, Oban,
   repo: TestApi.Repo,
-  plugins: [Oban.Plugins.Pruner],
+  plugins: [
+    # deleting completed, cancelled and discarded jobs after one week.
+    {Oban.Plugins.Pruner, max_age: 60},
+    # rescue orphans jobs
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)}
+  ],
   queues: [default: 10]
 
 # Import environment specific config. This must remain at the bottom

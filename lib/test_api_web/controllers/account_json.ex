@@ -25,7 +25,8 @@ defmodule TestApiWeb.AccountJSON do
   defp data(%Account{} = account) do
     %{
       id: account.id,
-      email: account.email
+      email: account.email,
+      webhook: account.webhook
     }
   end
 
@@ -33,7 +34,8 @@ defmodule TestApiWeb.AccountJSON do
     %{
       id: account.id,
       email: account.email,
-      token: token
+      token: token,
+      webhook: account.webhook
     }
   end
 end

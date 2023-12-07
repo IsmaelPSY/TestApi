@@ -13,7 +13,11 @@ defmodule TestApiWeb.Router do
       get "/", AccountController, :index
       get "/:id", AccountController, :show
       post "/create", AccountController, :create
+      put "/:id", AccountController, :update
+      delete  "/:id", AccountController, :delete
     end
-  end
 
+    post "/validate_time", ValidateController, :validate
+
+  end
 end

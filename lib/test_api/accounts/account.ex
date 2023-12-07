@@ -5,6 +5,7 @@ defmodule TestApi.Accounts.Account do
   schema "accounts" do
     field :email, :string
     field :hashed_password, :string
+    field :webhook, :string
     has_one :user, TestApi.Users.User
 
     timestamps(type: :utc_datetime)
@@ -13,7 +14,7 @@ defmodule TestApi.Accounts.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:email, :hashed_password])
+    |> cast(attrs, [:email, :hashed_password, :webhook])
     |> validate_required([:email, :hashed_password])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ and no spaces")
     |> validate_length(:email, max: 160)

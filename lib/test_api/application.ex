@@ -7,6 +7,8 @@ defmodule TestApi.Application do
 
   @impl true
   def start(_type, _args) do
+    Oban.Telemetry.attach_default_logger()
+
     children = [
       TestApiWeb.Telemetry,
       TestApi.Repo,

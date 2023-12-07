@@ -18,20 +18,30 @@ defmodule TestApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug TestApiWeb.Auth.Pipeline
+  end
+
   scope "/api", TestApiWeb do
     pipe_through :api
     get "/", DefaultController, :index
 
     scope "/accounts" do
-      get "/", AccountController, :index
-      get "/:id", AccountController, :show
       post "/create", AccountController, :create
       post "/sign_in", AccountController, :sign_in
+    end
+  end
+
+  scope "/api", TestApiWeb do
+    pipe_through [:api, :auth]
+
+    scope "/accounts" do
+      get "/", AccountController, :index
+      get "/:id", AccountController, :show
       put "/:id", AccountController, :update
       delete  "/:id", AccountController, :delete
     end
 
     post "/validate_time", ValidateController, :validate
-
   end
 end

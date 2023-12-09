@@ -39,9 +39,12 @@ defmodule TestApiWeb.Router do
       get "/", AccountController, :index
       get "/:id", AccountController, :show
       put "/:id", AccountController, :update
-      delete  "/:id", AccountController, :delete
+      delete "/:id", AccountController, :delete
     end
 
-    post "/validate_time", ValidateController, :validate
+    scope "/transactions" do
+      post "/create", TransactionController, :create
+      get "/:id", TransactionController, :show
+    end
   end
 end

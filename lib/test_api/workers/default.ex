@@ -1,4 +1,4 @@
-defmodule TestApi.DefaultWorker do
+defmodule TestApi.Workers.Default do
   use Oban.Worker, queue: :default, max_attempts: 5
 
   @impl Oban.Worker

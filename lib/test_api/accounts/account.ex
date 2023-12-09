@@ -1,4 +1,5 @@
 defmodule TestApi.Accounts.Account do
+  alias TestApi.Transactions.Transaction
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,6 +8,7 @@ defmodule TestApi.Accounts.Account do
     field :hashed_password, :string
     field :webhook, :string
     has_one :user, TestApi.Users.User
+    has_many :transactions, Transaction
 
     timestamps(type: :utc_datetime)
   end

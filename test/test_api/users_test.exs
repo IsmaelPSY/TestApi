@@ -21,7 +21,11 @@ defmodule TestApi.UsersTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{fullname: "some fullname", gender: "some gender", biography: "some biography"}
+      valid_attrs = %{
+        fullname: "some fullname",
+        gender: "some gender",
+        biography: "some biography"
+      }
 
       assert {:ok, %User{} = user} = Users.create_user(valid_attrs)
       assert user.fullname == "some fullname"
@@ -35,7 +39,12 @@ defmodule TestApi.UsersTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      update_attrs = %{fullname: "some updated fullname", gender: "some updated gender", biography: "some updated biography"}
+
+      update_attrs = %{
+        fullname: "some updated fullname",
+        gender: "some updated gender",
+        biography: "some updated biography"
+      }
 
       assert {:ok, %User{} = user} = Users.update_user(user, update_attrs)
       assert user.fullname == "some updated fullname"

@@ -15,12 +15,14 @@ defmodule TestApiWeb.TransactionController do
   def create(conn, %{"transaction" => transaction_params}) do
     account = conn.private[:guardian_default_resource]
 
-    unless account.webhook  do
+    unless account.webhook do
       raise ErrorResponse.IncompleteData, message: "Webhook field missing on Account"
     end
 
     with {:ok, %Transaction{} = transaction} <-
-        transaction_params |> Map.put("account_id", account.id)|> Transactions.create_transaction() do
+           transaction_params
+           |> Map.put("account_id", account.id)
+           |> Transactions.create_transaction() do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/transactions/#{transaction}")
@@ -36,7 +38,8 @@ defmodule TestApiWeb.TransactionController do
   def update(conn, %{"id" => id, "transaction" => transaction_params}) do
     transaction = Transactions.get_transaction!(id)
 
-    with {:ok, %Transaction{} = transaction} <- Transactions.update_transaction(transaction, transaction_params) do
+    with {:ok, %Transaction{} = transaction} <-
+           Transactions.update_transaction(transaction, transaction_params) do
       render(conn, :show, transaction: transaction)
     end
   end

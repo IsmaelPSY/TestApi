@@ -55,6 +55,7 @@ defmodule TestApi.Accounts do
     |> where(email: ^email)
     |> Repo.one()
   end
+
   @doc """
   Creates a account.
 

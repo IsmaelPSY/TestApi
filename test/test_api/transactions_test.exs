@@ -21,7 +21,13 @@ defmodule TestApi.TransactionsTest do
     end
 
     test "create_transaction/1 with valid data creates a transaction" do
-      valid_attrs = %{status: "some status", type: "some type", description: "some description", currency: "some currency", amount: "120.5"}
+      valid_attrs = %{
+        status: "some status",
+        type: "some type",
+        description: "some description",
+        currency: "some currency",
+        amount: "120.5"
+      }
 
       assert {:ok, %Transaction{} = transaction} = Transactions.create_transaction(valid_attrs)
       assert transaction.status == "some status"
@@ -37,9 +43,18 @@ defmodule TestApi.TransactionsTest do
 
     test "update_transaction/2 with valid data updates the transaction" do
       transaction = transaction_fixture()
-      update_attrs = %{status: "some updated status", type: "some updated type", description: "some updated description", currency: "some updated currency", amount: "456.7"}
 
-      assert {:ok, %Transaction{} = transaction} = Transactions.update_transaction(transaction, update_attrs)
+      update_attrs = %{
+        status: "some updated status",
+        type: "some updated type",
+        description: "some updated description",
+        currency: "some updated currency",
+        amount: "456.7"
+      }
+
+      assert {:ok, %Transaction{} = transaction} =
+               Transactions.update_transaction(transaction, update_attrs)
+
       assert transaction.status == "some updated status"
       assert transaction.type == "some updated type"
       assert transaction.description == "some updated description"
@@ -49,7 +64,10 @@ defmodule TestApi.TransactionsTest do
 
     test "update_transaction/2 with invalid data returns error changeset" do
       transaction = transaction_fixture()
-      assert {:error, %Ecto.Changeset{}} = Transactions.update_transaction(transaction, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Transactions.update_transaction(transaction, @invalid_attrs)
+
       assert transaction == Transactions.get_transaction!(transaction.id)
     end
 

@@ -34,7 +34,11 @@ defmodule TestApi.AccountsTest do
 
     test "update_account/2 with valid data updates the account" do
       account = account_fixture()
-      update_attrs = %{email: "some updated email", hashed_password: "some updated hashed_password"}
+
+      update_attrs = %{
+        email: "some updated email",
+        hashed_password: "some updated hashed_password"
+      }
 
       assert {:ok, %Account{} = account} = Accounts.update_account(account, update_attrs)
       assert account.email == "some updated email"

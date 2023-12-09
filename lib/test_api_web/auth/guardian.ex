@@ -24,7 +24,8 @@ defmodule TestApiWeb.Auth.Guardian do
 
   def authenticate(email, password) do
     case Accounts.get_account_by_email(email) do
-      nil -> {:error, :unauthorize}
+      nil ->
+        {:error, :unauthorize}
 
       account ->
         case validate_password(password, account.hashed_password) do

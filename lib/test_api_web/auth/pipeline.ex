@@ -1,7 +1,8 @@
 defmodule TestApiWeb.Auth.Pipeline do
-  use Guardian.Plug.Pipeline, otp_app: :test_api,
-  module: TestApiWeb.Auth.Guardian,
-  error_handler: TestApiWeb.Auth.GuardianErrorHandler
+  use Guardian.Plug.Pipeline,
+    otp_app: :test_api,
+    module: TestApiWeb.Auth.Guardian,
+    error_handler: TestApiWeb.Auth.GuardianErrorHandler
 
   plug Guardian.Plug.VerifySession
   plug Guardian.Plug.VerifyHeader

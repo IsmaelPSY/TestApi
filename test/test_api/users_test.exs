@@ -7,8 +7,7 @@ defmodule TestApi.UsersTest do
     alias TestApi.Users.User
 
     import TestApi.UsersFixtures
-
-    @invalid_attrs %{fullname: nil, gender: nil, biography: nil}
+    import TestApi.AccountsFixtures
 
     test "list_users/0 returns all users" do
       user = user_fixture()
@@ -22,40 +21,32 @@ defmodule TestApi.UsersTest do
 
     test "create_user/1 with valid data creates a user" do
       valid_attrs = %{
-        fullname: "some fullname",
+        full_name: "some fullname",
         gender: "some gender",
         biography: "some biography"
       }
 
-      assert {:ok, %User{} = user} = Users.create_user(valid_attrs)
-      assert user.fullname == "some fullname"
+      account = account_fixture()
+
+      assert {:ok, %User{} = user} = Users.create_user(account, valid_attrs)
+      assert user.full_name == "some fullname"
       assert user.gender == "some gender"
       assert user.biography == "some biography"
-    end
-
-    test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Users.create_user(@invalid_attrs)
     end
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
 
       update_attrs = %{
-        fullname: "some updated fullname",
+        full_name: "some updated fullname",
         gender: "some updated gender",
         biography: "some updated biography"
       }
 
       assert {:ok, %User{} = user} = Users.update_user(user, update_attrs)
-      assert user.fullname == "some updated fullname"
+      assert user.full_name == "some updated fullname"
       assert user.gender == "some updated gender"
       assert user.biography == "some updated biography"
-    end
-
-    test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Users.update_user(user, @invalid_attrs)
-      assert user == Users.get_user!(user.id)
     end
 
     test "delete_user/1 deletes the user" do

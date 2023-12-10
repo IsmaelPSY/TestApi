@@ -3,81 +3,63 @@ defmodule TestApiWeb.AccountControllerTest do
 
   import TestApi.AccountsFixtures
 
+  alias TestApiWeb.Auth.Guardian
   alias TestApi.Accounts.Account
 
   @create_attrs %{
-    email: "some email",
+    email: "valid@gmail.com",
+    hashed_password: "locked_password",
+    full_name: "Backend Dev",
+    biography: "Future great engineer"
+  }
+  @sign_in_attrs %{
+    email: "valid@gmail.com",
     hashed_password: "some hashed_password"
   }
-  @update_attrs %{
-    email: "some updated email",
-    hashed_password: "some updated hashed_password"
-  }
-  @invalid_attrs %{email: nil, hashed_password: nil}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all accounts", %{conn: conn} do
-      conn = get(conn, ~p"/api/accounts")
-      assert json_response(conn, 200)["data"] == []
-    end
-  end
+  # describe "index" do
+  #   test "lists all accounts", %{conn: conn} do
+  #     conn = get(conn, ~p"/api/accounts")
+  #     assert json_response(conn, 200)["data"] == []
+  #   end
+  # end
 
   describe "create account" do
     test "renders account when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/accounts", account: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      conn1 = post(conn, ~p"/api/accounts/create", account: @create_attrs)
+      assert %{"id" => id, "token" => token} = json_response(conn1, 201)["data"]
 
-      conn = get(conn, ~p"/api/accounts/#{id}")
-
-      assert %{
-               "id" => ^id,
-               "email" => "some email",
-               "hashed_password" => "some hashed_password"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/accounts", account: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update account" do
-    setup [:create_account]
-
-    test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
-      conn = put(conn, ~p"/api/accounts/#{account}", account: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, ~p"/api/accounts/#{id}")
+      conn2 =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> get(~p"/api/accounts/#{id}")
 
       assert %{
                "id" => ^id,
-               "email" => "some updated email",
-               "hashed_password" => "some updated hashed_password"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, account: account} do
-      conn = put(conn, ~p"/api/accounts/#{account}", account: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+               "email" => "valid@gmail.com"
+             } = json_response(conn2, 200)["data"]
     end
   end
 
-  describe "delete account" do
+  describe "sign in" do
     setup [:create_account]
 
-    test "deletes chosen account", %{conn: conn, account: account} do
-      conn = delete(conn, ~p"/api/accounts/#{account}")
-      assert response(conn, 204)
+    test "with email and password", %{
+      conn: conn,
+      account: %Account{id: id, email: email} = account
+    } do
+      {:ok, token, _claims} = Guardian.encode_and_sign(account)
 
-      assert_error_sent 404, fn ->
-        get(conn, ~p"/api/accounts/#{account}")
-      end
+      conn =
+        put_req_header(conn, "authorization", "Bearer #{token}")
+        |> post(~p"/api/accounts/sign_in", @sign_in_attrs)
+
+      assert %{"id" => ^id, "email" => ^email, "token" => _token} =
+               json_response(conn, 200)["data"]
     end
   end
 

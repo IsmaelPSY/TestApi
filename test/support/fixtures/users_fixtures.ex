@@ -8,14 +8,21 @@ defmodule TestApi.UsersFixtures do
   Generate a user.
   """
   def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
+    {:ok, account} =
+      %{
+        email: "valid@gmail.com",
+        hashed_password: "some hashed_password"
+      }
+      |> TestApi.Accounts.create_account()
+
+    attrs =
       attrs
       |> Enum.into(%{
         biography: "some biography",
-        fullname: "some fullname",
-        gender: "some gender"
+        fullname: "backend dev"
       })
-      |> TestApi.Users.create_user()
+
+    {:ok, user} = TestApi.Users.create_user(account, attrs)
 
     user
   end

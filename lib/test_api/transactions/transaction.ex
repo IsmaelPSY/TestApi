@@ -31,6 +31,7 @@ defmodule TestApi.Transactions.Transaction do
   @doc false
   def update_changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, [:description, :status])
+    |> cast(attrs, [:status])
+    |> validate_required([:status])
   end
 end

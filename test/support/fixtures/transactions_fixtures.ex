@@ -8,14 +8,21 @@ defmodule TestApi.TransactionsFixtures do
   Generate a transaction.
   """
   def transaction_fixture(attrs \\ %{}) do
+    {:ok, account} =
+      %{
+        email: "valid@gmail.com",
+        hashed_password: "some hashed_password"
+      }
+      |> TestApi.Accounts.create_account()
+
     {:ok, transaction} =
       attrs
       |> Enum.into(%{
         amount: "120.5",
-        currency: "some currency",
+        currency: "USD",
         description: "some description",
-        status: "some status",
-        type: "some type"
+        type: "some type",
+        account_id: account.id
       })
       |> TestApi.Transactions.create_transaction()
 

@@ -38,7 +38,7 @@ config :test_api, Oban,
   repo: TestApi.Repo,
   plugins: [
     # deleting completed, cancelled and discarded jobs after one week.
-    {Oban.Plugins.Pruner, max_age: 60},
+    {Oban.Plugins.Pruner, max_age: 60 * 5},
     # rescue orphans jobs
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)}
   ],

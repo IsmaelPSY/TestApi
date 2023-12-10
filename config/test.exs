@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :test_api, TestApi.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "backend",
+  password: "170520210921",
   hostname: "localhost",
-  database: "test_api_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "test_api_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
@@ -23,7 +23,7 @@ config :test_api, TestApiWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warning
 
-config :test_ap, Oban, testing: :inline
+config :test_api, Oban, testing: :inline
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

@@ -1,6 +1,7 @@
 defmodule TestApiWeb.TransactionController do
   use TestApiWeb, :controller
 
+  alias TestApi.Workers
   alias TestApi.Transactions
   alias TestApi.Transactions.Transaction
   alias TestApiWeb.Auth.ErrorResponse
@@ -23,6 +24,12 @@ defmodule TestApiWeb.TransactionController do
            transaction_params
            |> Map.put("account_id", account.id)
            |> Transactions.create_transaction() do
+      %{
+        transaction_id: transaction.id
+      }
+      |> Workers.Transaction.new()
+      |> Oban.insert()
+
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/transactions/#{transaction}")

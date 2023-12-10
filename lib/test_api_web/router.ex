@@ -36,7 +36,6 @@ defmodule TestApiWeb.Router do
     pipe_through [:api, :auth]
 
     scope "/accounts" do
-      get "/", AccountController, :index
       get "/:id", AccountController, :show
       put "/:id", AccountController, :update
       delete "/:id", AccountController, :delete

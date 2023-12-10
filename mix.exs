@@ -44,7 +44,8 @@ defmodule TestApi.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:guardian, "~> 2.3"},
       {:bcrypt_elixir, "~> 3.0"},
-      {:oban, "~> 2.16"}
+      {:oban, "~> 2.16"},
+      {:ex_machina, "~> 2.7.0", only: :test}
     ]
   end
 

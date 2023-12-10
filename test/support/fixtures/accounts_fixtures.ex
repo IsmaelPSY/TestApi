@@ -11,8 +11,9 @@ defmodule TestApi.AccountsFixtures do
     {:ok, account} =
       attrs
       |> Enum.into(%{
-        email: "some email",
-        hashed_password: "some hashed_password"
+        email: "valid@gmail.com",
+        hashed_password: "some hashed_password",
+        webhook: "fetch_bank_url"
       })
       |> TestApi.Accounts.create_account()
 

@@ -21,11 +21,10 @@ defmodule TestApi.AccountsTest do
     end
 
     test "create_account/1 with valid data creates a account" do
-      valid_attrs = %{email: "some email", hashed_password: "some hashed_password"}
+      valid_attrs = %{email: "valid@gmail.com", hashed_password: "some hashed_password"}
 
       assert {:ok, %Account{} = account} = Accounts.create_account(valid_attrs)
-      assert account.email == "some email"
-      assert account.hashed_password == "some hashed_password"
+      assert account.email == "valid@gmail.com"
     end
 
     test "create_account/1 with invalid data returns error changeset" do
@@ -36,13 +35,13 @@ defmodule TestApi.AccountsTest do
       account = account_fixture()
 
       update_attrs = %{
-        email: "some updated email",
-        hashed_password: "some updated hashed_password"
+        email: "update@gmail.com",
+        webhook: "add_webhook"
       }
 
       assert {:ok, %Account{} = account} = Accounts.update_account(account, update_attrs)
-      assert account.email == "some updated email"
-      assert account.hashed_password == "some updated hashed_password"
+      assert account.email == "update@gmail.com"
+      assert account.webhook == "add_webhook"
     end
 
     test "update_account/2 with invalid data returns error changeset" do

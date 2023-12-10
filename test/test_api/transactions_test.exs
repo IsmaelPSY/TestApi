@@ -7,6 +7,7 @@ defmodule TestApi.TransactionsTest do
     alias TestApi.Transactions.Transaction
 
     import TestApi.TransactionsFixtures
+    import TestApi.AccountsFixtures
 
     @invalid_attrs %{status: nil, type: nil, description: nil, currency: nil, amount: nil}
 
@@ -21,16 +22,18 @@ defmodule TestApi.TransactionsTest do
     end
 
     test "create_transaction/1 with valid data creates a transaction" do
+      account = account_fixture()
+
       valid_attrs = %{
-        status: "some status",
         type: "some type",
         description: "some description",
         currency: "some currency",
-        amount: "120.5"
+        amount: "120.5",
+        account_id: account.id
       }
 
       assert {:ok, %Transaction{} = transaction} = Transactions.create_transaction(valid_attrs)
-      assert transaction.status == "some status"
+      assert transaction.status == "pending"
       assert transaction.type == "some type"
       assert transaction.description == "some description"
       assert transaction.currency == "some currency"
@@ -45,21 +48,17 @@ defmodule TestApi.TransactionsTest do
       transaction = transaction_fixture()
 
       update_attrs = %{
-        status: "some updated status",
-        type: "some updated type",
-        description: "some updated description",
-        currency: "some updated currency",
-        amount: "456.7"
+        status: "cancelled"
       }
 
-      assert {:ok, %Transaction{} = transaction} =
+      assert {:ok, %Transaction{} = new_transaction} =
                Transactions.update_transaction(transaction, update_attrs)
 
-      assert transaction.status == "some updated status"
-      assert transaction.type == "some updated type"
-      assert transaction.description == "some updated description"
-      assert transaction.currency == "some updated currency"
-      assert transaction.amount == Decimal.new("456.7")
+      assert new_transaction.status == "cancelled"
+      assert new_transaction.type == transaction.type
+      assert new_transaction.description == transaction.description
+      assert new_transaction.currency == transaction.currency
+      assert new_transaction.amount == Decimal.new(transaction.amount)
     end
 
     test "update_transaction/2 with invalid data returns error changeset" do

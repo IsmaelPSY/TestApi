@@ -42,7 +42,7 @@ config :test_api, Oban,
     # rescue orphans jobs
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)}
   ],
-  queues: [default: 10]
+  queues: [default: 10, failed: 5, completed: 5]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

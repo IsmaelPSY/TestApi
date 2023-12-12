@@ -17,8 +17,16 @@ defmodule TestApi.Transactions do
       [%Transaction{}, ...]
 
   """
-  def list_transactions do
-    Repo.all(Transaction)
+  def list_transactions(status) do
+
+
+    # Enum.reduce(filter, Transaction, fn
+    # query, {:status, status} ->
+    #   from(t in query, where: t.status == ^status)
+    # end)
+    from(t in Transaction, where: t.status == ^status)
+    |> Repo.all()
+    |> IO.inspect()
   end
 
   @doc """

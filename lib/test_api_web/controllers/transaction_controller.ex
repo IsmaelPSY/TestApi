@@ -8,8 +8,12 @@ defmodule TestApiWeb.TransactionController do
 
   action_fallback TestApiWeb.FallbackController
 
-  def index(conn, _params) do
-    transactions = Transactions.list_transactions()
+  def all(conn, %{"status" => status}) do
+
+    IO.inspect(conn)
+    transactions = Transactions.list_transactions(status)
+    |> IO.inspect()
+
     render(conn, :index, transactions: transactions)
   end
 

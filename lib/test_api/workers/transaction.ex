@@ -2,6 +2,8 @@ defmodule TestApi.Workers.Transaction do
   alias TestApi.Transactions
   use Oban.Worker, queue: :default, max_attempts: 5
 
+  alias TestApi.Workers
+
   @impl Oban.Worker
   def perform(%Oban.Job{attempt: attempt, args: %{"transaction_id" => transaction_id}})
       when attempt == 5 do
@@ -9,10 +11,19 @@ defmodule TestApi.Workers.Transaction do
       false ->
         update_transaction(transaction_id, "failed")
 
+        %{"transaction_id" => transaction_id}
+        |> Workers.Failed.new()
+        |> Oban.insert()
+
         {:error, "Transaction failed."}
 
       true ->
         update_transaction(transaction_id, "completed")
+
+        %{"transaction_id" => transaction_id}
+        |> Workers.Completed.new()
+        |> Oban.insert()
+
         :ok
     end
   end
@@ -29,6 +40,11 @@ defmodule TestApi.Workers.Transaction do
 
       true ->
         update_transaction(transaction_id, "completed")
+
+        %{"transaction_id" => transaction_id}
+        |> Workers.Completed.new()
+        |> Oban.insert()
+
         :ok
     end
   end

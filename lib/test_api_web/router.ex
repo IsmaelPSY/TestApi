@@ -10,7 +10,8 @@ defmodule TestApiWeb.Router do
     conn |> json(%{errors: message}) |> halt()
   end
 
-  defp handle_errors(conn, %{reason: _reason}) do
+  defp handle_errors(conn, %{reason: _reason} = error) do
+    IO.inspect(error, label: "USER:::")
     conn |> json(%{errors: "Some error"}) |> halt()
   end
 
@@ -44,6 +45,7 @@ defmodule TestApiWeb.Router do
     scope "/transactions" do
       post "/create", TransactionController, :create
       get "/:id", TransactionController, :show
+      get "/all/:status", TransactionController, :all
     end
   end
 end
